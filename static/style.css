@@ -1,0 +1,27 @@
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th, .admin-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top;
+}
+
+.admin-table th {
+  background: #f0f0f0;
+}
+
+.admin-table tr:hover {
+  background: #fafafa;
+}
+
+button.danger {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}

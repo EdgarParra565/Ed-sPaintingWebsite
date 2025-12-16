@@ -4,16 +4,32 @@ Practice for building fullstack website
 
 
 // TODO next
-What We Should Do Next (Best Order)
-Option A — Admin Page (recommended next)
-View inquiries in the browser
-No SQL knowledge required
-Super useful for a business owner
-Option B — Email polish
-Add success message
-Error handling
-Prevent spam submissions
-Option C — Styling
-Make it look like a real website
-Mobile-friendly
-Clean business layout
+Add pagination to admin inbox
+
+Add reply-from-admin feature
+
+Add reCAPTCHA (optional)
+
+Prepare for deployment (Render / Fly.io / VPS)
+
+Add email templates (HTML emails)
+
+Pagination for admin inbox
+
+Archive instead of delete
+
+Search/filter inquiries
+
+HTML email templates
+
+Rate limiting (extra spam defense)
+
+Unit tests (very professional)
+
+Create base.html layout
+
+Apply Editorial styling to admin/login
+
+Add custom branding
+
+Clean up unused template sections
