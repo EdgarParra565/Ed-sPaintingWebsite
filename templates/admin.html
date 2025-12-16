@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin – Inquiries</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Customer Inquiries</h1>
+
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Message</th>
+  </tr>
+
+  {% for inquiry in inquiries %}
+  <tr><!DOCTYPE html>
+<html>
+<head>
+  <title>Admin – Inquiries</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+  <h1>Customer Inquiries</h1>
+
+  <table class="admin-table">
+    <tr>
+      <th>Date</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Message</th>
+      <th>Actions</th>
+    </tr>
+
+    {% for inquiry in inquiries %}
+    <tr>
+      <td>{{ inquiry.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+      <td>{{ inquiry.name }}</td>
+      <td>{{ inquiry.email }}</td>
+      <td>{{ inquiry.message }}</td>
+      <td>
+        <form method="POST" action="/delete/{{ inquiry.id }}" style="display:inline;">
+          <button class="danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <a href="/logout">Logout</a>
+</div>
+
+</body>
+</html>
+
+    <td>{{ inquiry.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+    <td>{{ inquiry.name }}</td>
+    <td>{{ inquiry.email }}</td>
+    <td>{{ inquiry.message }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+</body>
+</html>
