@@ -1,8 +1,6 @@
 # WebsiteTest
 LearningTobuildWebsite
 Practice for building fullstack website
-
-
 // TODO next
 Add pagination to admin inbox
 
