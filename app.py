@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 import smtplib
 
+
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "fallback-secret")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
