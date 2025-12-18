@@ -6,9 +6,14 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 import smtplib
+from flask_wtf import FlaskForm, CSRFProtect
+from wtforms import StringField, TextAreaField
+from wtforms.validators import DataRequired, Email
+
 
 
 app = Flask(__name__)
+csrf = CSRFProtect(app)
 app.secret_key = os.getenv("SECRET_KEY", "fallback-secret")
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config["SQLALCHEMY_DATABASE_URI"] = (
@@ -23,27 +28,59 @@ class Inquiry(db.Model):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=False)
     message = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now())
+
+class ContactForm(FlaskForm):
+    name = StringField("Name", validators=[DataRequired()])
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    message = TextAreaField("Message", validators=[DataRequired()])
+
+
+def send_email(inquiry):
+    server = os.getenv("MAIL_SERVER")
+    port = int(os.getenv("MAIL_PORT"))
+    username = os.getenv("MAIL_USERNAME")
+    password = os.getenv("MAIL_PASSWORD")
+    recipient = os.getenv("MAIL_TO")
+
+    subject = "New Website Inquiry"
+    body = f"""
+New inquiry received:
+
+Name: {inquiry.name}
+Email: {inquiry.email}
+
+Message:
+{inquiry.message}
+"""
+
+    message = f"Subject: {subject}\n\n{body}"
+
+    with smtplib.SMTP(server, port) as smtp:
+        smtp.starttls()
+        smtp.login(username, password)
+        smtp.sendmail(username, recipient, message)
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    if request.method == "POST":
+    form = ContactForm()
 
-        # Spam honeypot check (used later)
+    if form.validate_on_submit():
+
+        # Honeypot
         if request.form.get("company"):
             return redirect("/")
 
         inquiry = Inquiry(
-            name=request.form["name"],
-            email=request.form["email"],
-            message=request.form["message"]
+            name=form.name.data,
+            email=form.email.data,
+            message=form.message.data
         )
 
         try:
             db.session.add(inquiry)
             db.session.commit()
-            send_email(inquiry)
             flash("Your message has been sent successfully!", "success")
         except Exception:
             db.session.rollback()
@@ -51,7 +88,7 @@ def index():
 
         return redirect("/")
 
-    return render_template("index.html")
+    return render_template("index.html", form=form)
 
 
 @app.route("/delete/<int:inquiry_id>", methods=["POST"])
