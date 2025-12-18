@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>{% block title %}Business Website{% endblock %}</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}">
+</head>
+
+<body class="is-preload">
+
+<div id="wrapper">
+
+  <div id="main">
+    <div class="inner">
+
+      <header id="header">
+        <a href="/" class="logo"><strong>Your Business</strong></a>
+      </header>
+
+      {% block content %}{% endblock %}
+
+    </div>
+  </div>
+
+  <div id="sidebar">
+    <div class="inner">
+
+      <nav id="menu">
+        <header class="major"><h2>Menu</h2></header>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/login">Admin</a></li>
+        </ul>
+      </nav>
+
+      <section>
+        <header class="major"><h2>Get in touch</h2></header>
+        <ul class="contact">
+          <li class="icon solid fa-envelope">business@email.com</li>
+          <li class="icon solid fa-phone">(555) 555-5555</li>
+        </ul>
+      </section>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+</body>
+</html>
