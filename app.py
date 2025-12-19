@@ -62,7 +62,6 @@ Message:
         smtp.login(username, password)
         smtp.sendmail(username, recipient, message)
 
-
 @app.route("/", methods=["GET", "POST"])
 def index():
     form = ContactForm()
