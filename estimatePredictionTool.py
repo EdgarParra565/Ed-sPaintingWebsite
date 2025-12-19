@@ -21,5 +21,21 @@
 # - parameter is always true for garage estimators, false for room estimators
 # - prompts user on different types of epoxy flooring, chip choice or no just solution
 # Method 6: Display total method call:
-# - takes stored parameters and gets summation of all parameters if boolean for parameter is true.
+# - takes stored parameters and gets summation of all parameters if boolean for parameter is true.\
+
+
+def estimate_price(service_type, square_feet, interior, epoxy_type=None):
+    base_rate = 0
+
+    if service_type == "painting":
+        base_rate = 2.50 if interior else 3.25
+
+    elif service_type == "epoxy":
+        if epoxy_type == "metallic":
+            base_rate = 7.50
+        else:
+            base_rate = 5.00
+
+    return round(base_rate * square_feet, 2)
+
 

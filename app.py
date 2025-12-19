@@ -9,6 +9,7 @@ import smtplib
 from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired, Email
+from estimatePredictionTool import estimate_price
 
 
 
@@ -89,6 +90,35 @@ def index():
         return redirect("/")
 
     return render_template("index.html", form=form)
+
+@app.route("/gallery/painting")
+def painting_gallery():
+    return render_template("painting_gallery.html")
+
+
+@app.route("/gallery/epoxy")
+def epoxy_gallery():
+    return render_template("epoxy_gallery.html")
+
+
+@app.route("/estimate", methods=["GET", "POST"])
+def estimate():
+    estimate_result = None
+
+    if request.method == "POST":
+        service_type = request.form.get("service_type")
+        square_feet = int(request.form.get("square_feet"))
+        interior = request.form.get("interior") == "yes"
+        epoxy_type = request.form.get("epoxy_type")
+
+        estimate_result = estimate_price(
+            service_type,
+            square_feet,
+            interior,
+            epoxy_type
+        )
+
+    return render_template("estimate.html", estimate=estimate_result)
 
 
 @app.route("/delete/<int:inquiry_id>", methods=["POST"])

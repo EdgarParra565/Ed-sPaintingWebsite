@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Epoxy Flooring Gallery{% endblock %}
+
+{% block content %}
+<section>
+  <header class="major">
+    <h2>Epoxy Flooring</h2>
+    <p>Garage, commercial, and decorative epoxy floors</p>
+  </header>
+
+  <div class="posts">
+    <article>
+      <img src="{{ url_for('static', filename='images/epoxy1.jpg') }}" alt="">
+      <h3>Garage Floor</h3>
+    </article>
+
+    <article>
+      <img src="{{ url_for('static', filename='images/epoxy2.jpg') }}" alt="">
+      <h3>Metallic Epoxy</h3>
+    </article>
+  </div>
+</section>
+{% endblock %}
