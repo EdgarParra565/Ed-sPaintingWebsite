@@ -14,86 +14,121 @@
   Final pricing may vary depending on several factors and conditions. This tool is intended for general guidance only.
 </div>
 
+  <!-- Fields for estimator -->
   <form method="POST">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <!-- CRSF protection -->
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
+
+<div class="form-group">
+  <label for="service_type">Service Type</label>
+  <select name="service_type" id="service_type">
+    <option value="painting" {% if selected_service == "painting" %}selected{% endif %}>Painting</option>
+    <option value="epoxy" {% if selected_service == "epoxy" %}selected{% endif %}>Epoxy Flooring</option>
+  </select>
+</div>
+
+      <!-- Fields for Length and Width always needed -->
+    <div class="form-group">
+  <label for="length">Length (ft)</label>
+  <input type="number"
+         name="length"
+         id="length"
+         step="0.1"
+         required
+         value="{{ request.form.length|default('') }}">
+</div>
+
+<div class="form-group">
+  <label for="width">Width (ft)</label>
+  <input type="number"
+         name="width"
+         id="width"
+         step="0.1"
+         required
+         value="{{ request.form.width|default('') }}">
+</div>
+
+
+<!-- Epoxy Fields -->
+<div id="epoxy-fields" style="{% if selected_service == 'epoxy' %}display:block{% else %}display:none{% endif %};">
+  <div class="form-group">
+    <label for="epoxy-type">Floor Type</label>
+    <select name="floor_type" id="epoxy-type">
+      <option value="color" {% if floor_type_selected == 'color' %}selected{% endif %}>Color</option>
+      <option value="chip" {% if floor_type_selected == 'chip' %}selected{% endif %}>Chip</option>
+      <option value="metallic" {% if floor_type_selected == 'metallic' %}selected{% endif %}>Metallic</option>
+    </select>
+  </div>
+</div>
+
+<!-- Painting Fields -->
+<div id="painting-fields" style="{% if selected_service == 'painting' %}display:block{% else %}display:none{% endif %};">
+  <div class="form-group">
+    <label for="height">Wall Height (ft)</label>
+    <input type="number" name="height" id="height" step="0.1" value="{{ height_value }}">
+  </div>
 
   <div class="form-group">
-    <label for="service_type">Service Type</label>
-    <select name="service_type" id="service_type">
-      <option value="painting">Painting</option>
-      <option value="epoxy">Epoxy Flooring</option>
+    <label for="full_repaint">Walls</label>
+    <select name="full_repaint" id="full_repaint">
+      <option value="yes" {% if full_repaint_value == 'yes' %}selected{% endif %}>Full Repaint</option>
+      <option value="no" {% if full_repaint_value == 'no' %}selected{% endif %}>Refresh Coat</option>
     </select>
   </div>
 
   <div class="form-group">
-    <label for="length">Length (ft)</label>
-    <input type="number" name="length" id="length" step="0.1" required>
+    <label for="paint_ceiling">Paint Ceiling?</label>
+    <select name="paint_ceiling" id="paint_ceiling">
+      <option value="no" {% if paint_ceiling_value == 'no' %}selected{% endif %}>No</option>
+      <option value="yes" {% if paint_ceiling_value == 'yes' %}selected{% endif %}>Yes</option>
+    </select>
   </div>
 
   <div class="form-group">
-    <label for="width">Width (ft)</label>
-    <input type="number" name="width" id="width" step="0.1" required>
+    <label for="ceiling_repaint">Ceiling Repaint?</label>
+    <select name="ceiling_repaint" id="ceiling_repaint">
+      <option value="no" {% if ceiling_repaint_value == 'no' %}selected{% endif %}>Fresh Coat</option>
+      <option value="yes" {% if ceiling_repaint_value == 'yes' %}selected{% endif %}>Repaint</option>
+    </select>
   </div>
 
-  <div id="painting-fields">
-    <div class="form-group">
-      <label for="height">Wall Height (ft)</label>
-      <input type="number" name="height" id="height" step="0.1">
-    </div>
-
-    <div class="form-group">
-      <label for="full_repaint">Walls</label>
-      <select name="full_repaint" id="full_repaint">
-        <option value="yes">Full Repaint</option>
-        <option value="no">Refresh Coat</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="paint_ceiling">Paint Ceiling?</label>
-      <select name="paint_ceiling" id="paint_ceiling">
-        <option value="no">No</option>
-        <option value="yes">Yes</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="ceiling_repaint">Ceiling Repaint?</label>
-      <select name="ceiling_repaint" id="ceiling_repaint">
-        <option value="no">Fresh Coat</option>
-        <option value="yes">Repaint</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="baseboards">Baseboards?</label>
-      <select name="baseboards" id="baseboards">
-        <option value="no">No</option>
-        <option value="yes">Yes</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="crown">Crown Molding?</label>
-      <select name="crown" id="crown">
-        <option value="no">No</option>
-        <option value="yes">Yes</option>
-      </select>
-    </div>
+  <div class="form-group">
+    <label for="baseboards">Baseboards?</label>
+    <select name="baseboards" id="baseboards">
+      <option value="no" {% if baseboards_value == 'no' %}selected{% endif %}>No</option>
+      <option value="yes" {% if baseboards_value == 'yes' %}selected{% endif %}>Yes</option>
+    </select>
   </div>
+
+  <div class="form-group">
+    <label for="crown">Crown Molding?</label>
+    <select name="crown" id="crown">
+      <option value="no" {% if crown_value == 'no' %}selected{% endif %}>No</option>
+      <option value="yes" {% if crown_value == 'yes' %}selected{% endif %}>Yes</option>
+    </select>
+  </div>
+</div>
+
 
   <button class="primary">Calculate Estimate</button>
 </form>
 
 
-  <!-- Display Result -->
-  {% if estimate %}
-    <div class="box" style="margin-top: 1em;">
-      <h3>Estimated Price</h3>
-      <strong>${{ estimate }}</strong>
-    </div>
-  {% endif %}
+<!-- Display Result -->
+{% if estimate %}
+  <div class="box" style="margin-top: 1em;">
+    <h3>Estimated Price</h3>
+    <strong>${{ estimate }}</strong>
+  </div>
+{% endif %}
+
+{% if message %}
+  <div class="box" style="margin-top: 1em; color: #b22222;">
+    <strong>{{ message }}</strong>
+  </div>
+{% endif %}
+
 
   <!-- Preview Image -->
   <div style="margin-top: 2em;">

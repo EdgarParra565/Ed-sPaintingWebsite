@@ -103,16 +103,18 @@ def epoxy_gallery():
 @app.route("/estimate", methods=["GET", "POST"])
 def estimate():
     estimate_result = None
+    custom_message = ""
+    selected_service = "painting"  # default
 
     if request.method == "POST":
-        service_type = request.form.get("service_type")
+        selected_service = request.form.get("service_type", "painting")
 
-        if service_type == "painting":
+        if selected_service == "painting":
             paint = PaintEstimator()
 
-            length = float(request.form.get("length"))
-            width = float(request.form.get("width"))
-            height = float(request.form.get("height"))
+            length = float(request.form.get("length", 0))
+            width = float(request.form.get("width", 0))
+            height = float(request.form.get("height", 0))
 
             full_repaint = request.form.get("full_repaint") == "yes"
             paint_ceiling = request.form.get("paint_ceiling") == "yes"
@@ -127,20 +129,29 @@ def estimate():
 
             estimate_result = paint.total()
 
-        elif service_type == "epoxy":
+        elif selected_service == "epoxy":
+            length = float(request.form.get("length", 0))
+            width = float(request.form.get("width", 0))
+            epoxy_type = request.form.get("floor_type", "solid")
             epoxy = EpoxyEstimator()
-
-            length = float(request.form.get("length"))
-            width = float(request.form.get("width"))
-            epoxy_type = request.form.get("epoxy_type")
-
             epoxy.estimate_floor(length, width, epoxy_type)
             estimate_result = epoxy.total()
+            custom_message = epoxy.custom_message
 
     return render_template(
         "estimate.html",
-        estimate=estimate_result
+        estimate=estimate_result,
+        message=custom_message,
+        selected_service=selected_service,
+        floor_type_selected=request.form.get("floor_type", "color"),
+        height_value=request.form.get("height", ""),
+        full_repaint_value=request.form.get("full_repaint", "no"),
+        paint_ceiling_value=request.form.get("paint_ceiling", "no"),
+        ceiling_repaint_value=request.form.get("ceiling_repaint", "no"),
+        baseboards_value=request.form.get("baseboards", "no"),
+        crown_value=request.form.get("crown", "no"),
     )
+
 
 @app.route("/delete/<int:inquiry_id>", methods=["POST"])
 def delete_inquiry(inquiry_id):
