@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Painting Gallery{% endblock %}
+
+{% block content %}
+<section>
+  <header class="major">
+    <h2>Painting Projects</h2>
+    <p>Interior and exterior painting work</p>
+  </header>
+
+  <div class="posts">
+    <article>
+      <img src="{{ url_for('static', filename='images/painting1.jpg') }}" alt="">
+      <h3>Interior Living Room</h3>
+    </article>
+
+    <article>
+      <img src="{{ url_for('static', filename='images/painting2.jpg') }}" alt="">
+      <h3>Exterior House</h3>
+    </article>
+  </div>
+</section>
+{% endblock %}
