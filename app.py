@@ -9,7 +9,7 @@ import smtplib
 from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired, Email
-from estimatePredictionTool import estimate_price
+from estimatePredictionTool import PaintEstimator, EpoxyEstimator
 
 
 
@@ -107,19 +107,41 @@ def estimate():
 
     if request.method == "POST":
         service_type = request.form.get("service_type")
-        square_feet = int(request.form.get("square_feet"))
-        interior = request.form.get("interior") == "yes"
-        epoxy_type = request.form.get("epoxy_type")
 
-        estimate_result = estimate_price(
-            service_type,
-            square_feet,
-            interior,
-            epoxy_type
-        )
+        if service_type == "painting":
+            paint = PaintEstimator()
 
-    return render_template("estimate.html", estimate=estimate_result)
+            length = float(request.form.get("length"))
+            width = float(request.form.get("width"))
+            height = float(request.form.get("height"))
 
+            full_repaint = request.form.get("full_repaint") == "yes"
+            paint_ceiling = request.form.get("paint_ceiling") == "yes"
+            ceiling_repaint = request.form.get("ceiling_repaint") == "yes"
+
+            baseboards = request.form.get("baseboards") == "yes"
+            crown = request.form.get("crown") == "yes"
+
+            paint.estimate_walls(length, width, height, full_repaint)
+            paint.estimate_ceiling(paint_ceiling, ceiling_repaint)
+            paint.estimate_trim(baseboards, crown)
+
+            estimate_result = paint.total()
+
+        elif service_type == "epoxy":
+            epoxy = EpoxyEstimator()
+
+            length = float(request.form.get("length"))
+            width = float(request.form.get("width"))
+            epoxy_type = request.form.get("epoxy_type")
+
+            epoxy.estimate_floor(length, width, epoxy_type)
+            estimate_result = epoxy.total()
+
+    return render_template(
+        "estimate.html",
+        estimate=estimate_result
+    )
 
 @app.route("/delete/<int:inquiry_id>", methods=["POST"])
 def delete_inquiry(inquiry_id):
@@ -153,9 +175,6 @@ def login():
 def admin():
     if not session.get("admin_logged_in"):
         return redirect("/login")
-
-    inquiries = Inquiry.query.order_by(Inquiry.created_at.desc()).all()
-    return render_template("admin.html", inquiries=inquiries)
 
 @app.route("/logout")
 def logout():

@@ -1,47 +1,72 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <title>Business Website</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}">
-</head>
+{% extends "base.html" %}
 
-<body class="is-preload">
+{% block content %}
 
-<div id="wrapper">
+<!-- Banner -->
+<section id="banner">
+  <div class="content">
+    <header>
+      <h1>Welcome to Our Business</h1>
+      <p>Professional services you can trust</p>
+    </header>
+    <p>
+      We specialize in providing high-quality local services.
+      Contact us below and we’ll get back to you quickly.
+    </p>
+  </div>
+  <span class="image object">
+    <img src="{{ url_for('static', filename='images/pic10.jpg') }}" alt="">
+  </span>
+</section>
 
-  <!-- Main -->
-  <div id="main">
-    <div class="inner">
+<!-- About Us Section -->
+<section id="about-us">
+  <header class="major">
+    <h2>About Us</h2>
+  </header>
+  <p>
+    We are a local business specializing in high-quality painting and epoxy flooring services.
+    Our team is dedicated to providing professional and reliable service for both residential and commercial projects.
+  </p>
+  <p>
+    With years of experience and a commitment to customer satisfaction, we ensure every project is completed to the highest standards.
+  </p>
+</section>
 
-      <!-- Header -->
-      <header id="header">
-        <a href="/" class="logo"><strong>Your Business</strong></a>
-        <ul class="icons">
-          <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-          <li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-        </ul>
-      </header>
+<!-- Services Section -->
+<section id="services">
+  <header class="major">
+    <h2>Our Services</h2>
+  </header>
+  <div class="features">
+    <article>
+      <span class="icon solid fa-paint-roller"></span>
+      <div class="content">
+        <h3>Painting</h3>
+        <p>Interior and exterior painting services, including walls, ceilings, and trims.</p>
+      </div>
+    </article>
 
-      <!-- Banner -->
-      <section id="banner">
-        <div class="content">
-          <header>
-            <h1>Welcome to Our Business</h1>
-            <p>Professional services you can trust</p>
-          </header>
-          <p>
-            We specialize in providing high-quality local services.
-            Contact us below and we’ll get back to you quickly.
-          </p>
-        </div>
-        <span class="image object">
-          <img src="{{ url_for('static', filename='images/pic10.jpg') }}" alt="">
-        </span>
-      </section>
+    <article>
+      <span class="icon solid fa-warehouse"></span>
+      <div class="content">
+        <h3>Epoxy Flooring</h3>
+        <p>Garage and commercial epoxy flooring with options for solid, chip, or metallic finishes.</p>
+      </div>
+    </article>
 
-      <!-- Contact Section -->
+    <article>
+      <span class="icon solid fa-tools"></span>
+      <div class="content">
+        <h3>Additional Services</h3>
+        <p>Custom requests, trim work, and consultation for your home or business projects.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+
+<!-- Contact Section -->
 <section id="contact">
   <header class="major">
     <h2>Contact Us</h2>
@@ -53,81 +78,29 @@
     {% endfor %}
   {% endwith %}
 
-<form method="POST">
-  {{ form.hidden_tag() }}
+  <form method="POST">
+    {{ form.hidden_tag() }}
 
-  <div class="row gtr-uniform">
-    <div class="col-6 col-12-xsmall">
-      {{ form.name(class="input", placeholder="Name") }}
+    <div class="row gtr-uniform">
+      <div class="col-6 col-12-xsmall">
+        {{ form.name(class="input", placeholder="Name") }}
+      </div>
+
+      <div class="col-6 col-12-xsmall">
+        {{ form.email(class="input", placeholder="Email") }}
+      </div>
+
+      <div class="col-12">
+        {{ form.message(rows="6", placeholder="Message") }}
+      </div>
+
+      <input type="text" name="company" style="display:none">
+
+      <div class="col-12">
+        <button class="primary">Send Message</button>
+      </div>
     </div>
-
-    <div class="col-6 col-12-xsmall">
-      {{ form.email(class="input", placeholder="Email") }}
-    </div>
-
-    <div class="col-12">
-      {{ form.message(rows="6", placeholder="Message") }}
-    </div>
-
-    <input type="text" name="company" style="display:none">
-
-    <div class="col-12">
-      <button class="primary">Send Message</button>
-    </div>
-  </div>
-</form>
+  </form>
 </section>
 
-
-    </div>
-  </div>
-
-<!-- Sidebar -->
-<div id="sidebar">
-  <div class="inner">
-
-    <!-- Menu -->
-<nav id="menu">
-  <header class="major"><h2>Menu</h2></header>
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/gallery/painting">Painting Gallery</a></li>
-    <li><a href="/gallery/epoxy">Epoxy Gallery</a></li>
-    <li><a href="/estimate">Get an Estimate</a></li>
-    <li><a href="/login">Admin</a></li>
-  </ul>
-</nav>
-
-
-    <!-- Get in touch -->
-    <section>
-      <header class="major">
-        <h2>Get in touch</h2>
-      </header>
-      <ul class="contact">
-        <li class="icon solid fa-envelope">business@email.com</li>
-        <li class="icon solid fa-phone">(555) 555-5555</li>
-        <li class="icon solid fa-home">Your City, State</li>
-      </ul>
-    </section>
-
-    <footer id="footer">
-      <p class="copyright">
-        &copy; Your Business. Design by HTML5 UP.
-      </p>
-    </footer>
-
-  </div>
-</div>
-
-</div>
-
-<!-- Scripts -->
-<script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
-<script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
-<script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
-<script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
-<script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
-
-</body>
-</html>
+{% endblock %}
