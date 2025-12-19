@@ -23,10 +23,10 @@
 
 class PaintEstimator:
     def __init__(self):
-        self.wall_cost = 0.0
-        self.ceiling_cost = 0.0
-        self.trim_cost = 0.0
-        self.square_footage = 0.0
+        self.wall_cost = 0.00
+        self.ceiling_cost = 0.00
+        self.trim_cost = 0.00
+        self.square_footage = 0.00
 
     # -------------------------
     # Walls
@@ -39,11 +39,11 @@ class PaintEstimator:
         full_repaint: bool
     ):
         self.square_footage = length * width
-
+        # TODO: change base rates
         base_rate = 2.50
         coats = 3 if full_repaint else 1
 
-        height_adjustment = 0.0
+        height_adjustment = 0.00
         if height > 10:
             height_adjustment = 0.25 * (height - 10)
         elif height < 8:
@@ -63,7 +63,7 @@ class PaintEstimator:
     ):
         if not paint_ceiling:
             return
-
+        #TODO: change rate
         rate = 1.50
         coats = 2 if full_repaint else 1
         self.ceiling_cost = rate * self.square_footage * coats
@@ -76,10 +76,11 @@ class PaintEstimator:
         baseboards: bool,
         crown: bool
     ):
+        # TODO: should be multiplied by square footage of room
         if baseboards:
-            self.trim_cost += 150.0
+            self.trim_cost += 150.00
         if crown:
-            self.trim_cost += 200.0
+            self.trim_cost += 200.00
 
     # -------------------------
     # Total
@@ -93,8 +94,8 @@ class PaintEstimator:
 # Class for epoxy flooring
 class EpoxyEstimator:
     def __init__(self):
-        self.square_footage = 0.0
-        self.epoxy_cost = 0.0
+        self.square_footage = 0.00
+        self.epoxy_cost = 0.00
 
     def estimate_floor(
         self,
@@ -105,6 +106,7 @@ class EpoxyEstimator:
         self.square_footage = length * width
 
         rates = {
+            #TODO: change rates
             "solid": 5.00,
             "chip": 6.00,
             "metallic": 7.50
