@@ -1,0 +1,25 @@
+For this to work, your static/images/previews/ folder should have:
+
+Painting Images:
+
+interior_livingroom.jpg
+interior_full_repaint.jpg
+interior_refresh.jpg
+interior_full_repaint_ceiling_fresh.jpg
+interior_full_repaint_ceiling_repaint.jpg
+interior_full_repaint_baseboards.jpg
+interior_full_repaint_crown.jpg
+interior_full_repaint_ceiling_fresh_baseboards_crown.jpg
+... (and any combination you want to show)
+
+
+Epoxy Images:
+
+epoxy_solid.jpg
+epoxy_chip.jpg
+epoxy_metallic.jpg
+epoxy_garage.jpg (default)
+
+
+Don’t need every combination, just the highlights.
+The JS will fall back gracefully.

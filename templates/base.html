@@ -16,9 +16,13 @@
 
       <header id="header">
         <a href="/" class="logo"><strong>Your Business</strong></a>
+        <ul class="icons">
+          <li><a href="#" class="icon brands fa-facebook-f"></a></li>
+          <li><a href="#" class="icon brands fa-instagram"></a></li>
+        </ul>
       </header>
 
-      {% block content %}{% endblock %}
+      {% block content %}{% endblock %} <!-- Page-specific content goes here -->
 
     </div>
   </div>
@@ -27,19 +31,26 @@
     <div class="inner">
 
       <nav id="menu">
-        <header class="major"><h2>Menu</h2></header>
-        <ul>
-  <li><a href="/">Home</a></li>
-  <li><a href="/estimate">Get an Estimate</a></li>
-  <li><a href="/login">Admin</a></li>
+  <header class="major"><h2>Menu</h2></header>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/gallery/painting">Painting Gallery</a></li>
+    <li><a href="/gallery/epoxy">Epoxy Gallery</a></li>
+    <li><a href="/estimate">Get an Estimate</a></li>
+    {% if session.get('admin_logged_in') %}
+      <li><a href="/admin">Admin</a></li>
+      <li><a href="/logout">Logout</a></li>
+    {% endif %}
   </ul>
-      </nav>
+</nav>
+
 
       <section>
         <header class="major"><h2>Get in touch</h2></header>
         <ul class="contact">
           <li class="icon solid fa-envelope">business@email.com</li>
           <li class="icon solid fa-phone">(555) 555-5555</li>
+          <li class="icon solid fa-home">Your City, State</li>
         </ul>
       </section>
 
