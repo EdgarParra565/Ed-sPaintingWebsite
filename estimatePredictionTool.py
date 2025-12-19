@@ -20,6 +20,8 @@
 # - prompts user on different types of epoxy flooring, chip choice or no just solution
 # Method 6: Display total method call:
 # - takes stored parameters and gets summation of all parameters if boolean for parameter is true.\
+from unicodedata import category
+
 
 class PaintEstimator:
     def __init__(self):
@@ -76,11 +78,14 @@ class PaintEstimator:
         baseboards: bool,
         crown: bool
     ):
+        # TODO: find rates for crown and base trims
+        crown_trim_rate = 1.50
+        base_trim_rate = 1.50
         # TODO: should be multiplied by square footage of room
         if baseboards:
-            self.trim_cost += 150.00
+            self.trim_cost += (self.square_footage * base_trim_rate)
         if crown:
-            self.trim_cost += 200.00
+            self.trim_cost += (self.square_footage * crown_trim_rate)
 
     # -------------------------
     # Total
@@ -94,26 +99,24 @@ class PaintEstimator:
 # Class for epoxy flooring
 class EpoxyEstimator:
     def __init__(self):
-        self.square_footage = 0.00
-        self.epoxy_cost = 0.00
+        self.square_footage = 0.0
+        self.epoxy_cost = 0.0
+        self.custom_message = ""
 
-    def estimate_floor(
-        self,
-        length: float,
-        width: float,
-        epoxy_type: str
-    ):
+    def estimate_floor(self, length: float, width: float, epoxy_type: str):
         self.square_footage = length * width
+        # TODO: need to change rates
+        rates = {"solid": 5.0, "chip": 6.0, "metallic": None}
 
-        rates = {
-            #TODO: change rates
-            "solid": 5.00,
-            "chip": 6.00,
-            "metallic": 7.50
-        }
-
-        rate = rates.get(epoxy_type, 5.00)
-        self.epoxy_cost = self.square_footage * rate
+        if epoxy_type.lower() == "metallic":
+            self.custom_message = (
+                "You selected Metallic epoxy. Pricing is custom and "
+                "will be provided in person."
+            )
+            self.epoxy_cost = 0.0
+        else:
+            rate = rates.get(epoxy_type.lower(), 5.0)
+            self.epoxy_cost = self.square_footage * rate
 
     def total(self) -> float:
         return round(self.epoxy_cost, 2)

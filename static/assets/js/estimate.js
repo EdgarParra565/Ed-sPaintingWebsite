@@ -12,84 +12,72 @@ document.addEventListener("DOMContentLoaded", function () {
   const baseboards = document.querySelector('[name="baseboards"]');
   const crown = document.querySelector('[name="crown"]');
 
-  // Epoxy option
-  const epoxyType = document.querySelector('[name="epoxy_type"]');
+  // Epoxy option (FIXED NAME)
+  const epoxyType = document.querySelector('[name="floor_type"]');
 
   if (!service || !preview || !paintingFields || !epoxyFields) return;
 
   function updatePreview() {
+    /* ======================
+       PAINTING MODE
+    ======================= */
     if (service.value === "painting") {
       paintingFields.style.display = "block";
       epoxyFields.style.display = "none";
 
-      // Determine which painting image to show
-      let imageName = "interior_livingroom"; // default
+      let imageName = "interior_livingroom";
 
-      // Walls type
-      if (fullRepaint && fullRepaint.value === "yes") {
+      // Walls
+      if (fullRepaint?.value === "yes") {
         imageName = "interior_full_repaint";
-      } else if (fullRepaint && fullRepaint.value === "no") {
+      } else {
         imageName = "interior_refresh";
       }
 
       // Ceiling
-      if (paintCeiling && paintCeiling.value === "yes") {
-        if (ceilingRepaint && ceilingRepaint.value === "yes") {
-          imageName += "_ceiling_repaint";
-        } else {
-          imageName += "_ceiling_fresh";
-        }
+      if (paintCeiling?.value === "yes") {
+        imageName += ceilingRepaint?.value === "yes"
+          ? "_ceiling_repaint"
+          : "_ceiling_fresh";
       }
 
-      // Trims
-      if (baseboards && baseboards.value === "yes") {
-        imageName += "_baseboards";
-      }
-      if (crown && crown.value === "yes") {
-        imageName += "_crown";
-      }
+      // Trim
+      if (baseboards?.value === "yes") imageName += "_baseboards";
+      if (crown?.value === "yes") imageName += "_crown";
 
       preview.src = `/static/images/previews/${imageName}.jpg`;
+    }
 
-    } else if (service.value === "epoxy") {
+    /* ======================
+       EPOXY MODE
+    ======================= */
+    else if (service.value === "epoxy") {
       paintingFields.style.display = "none";
       epoxyFields.style.display = "block";
 
-      let epoxyImage = "epoxy_garage";
+      let epoxyImage = "epoxy_solid";
 
-      if (epoxyType) {
-        if (epoxyType.value === "chip") {
-          epoxyImage = "epoxy_chip";
-        } else if (epoxyType.value === "metallic") {
-          epoxyImage = "epoxy_metallic";
-        } else {
-          epoxyImage = "epoxy_solid";
-        }
+      if (epoxyType?.value === "chip") {
+        epoxyImage = "epoxy_chip";
+      } else if (epoxyType?.value === "metallic") {
+        epoxyImage = "epoxy_metallic";
       }
 
       preview.src = `/static/images/previews/${epoxyImage}.jpg`;
     }
   }
 
-  // Update preview on page load
-  updatePreview();
-
-  // Update preview when any relevant option changes
+  /* ======================
+     EVENT LISTENERS
+  ======================= */
   service.addEventListener("change", updatePreview);
-  if (fullRepaint) fullRepaint.addEventListener("change", updatePreview);
-  if (paintCeiling) paintCeiling.addEventListener("change", updatePreview);
-  if (ceilingRepaint) ceilingRepaint.addEventListener("change", updatePreview);
-  if (baseboards) baseboards.addEventListener("change", updatePreview);
-  if (crown) crown.addEventListener("change", updatePreview);
-  if (epoxyType) epoxyType.addEventListener("change", updatePreview);
+  fullRepaint?.addEventListener("change", updatePreview);
+  paintCeiling?.addEventListener("change", updatePreview);
+  ceilingRepaint?.addEventListener("change", updatePreview);
+  baseboards?.addEventListener("change", updatePreview);
+  crown?.addEventListener("change", updatePreview);
+  epoxyType?.addEventListener("change", updatePreview);
+
+  // Run once on page load (important after POST)
+  updatePreview();
 });
-
-const ceiling = document.querySelector('[name="paint_ceiling"]');
-
-if (ceiling) {
-  ceiling.addEventListener("change", () => {
-    if (ceiling.value === "yes") {
-      preview.src = "/static/images/previews/interior_ceiling.jpg";
-    }
-  });
-}
