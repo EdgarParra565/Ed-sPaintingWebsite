@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+<section>
+  <h1>Admin Login</h1>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+      {{ form.password.label }}
+      {{ form.password }}
+    </div>
+    <button type="submit">Login</button>
+  </form>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+      {% for category, message in messages %}
+        <li style="color: {% if category=='error' %}red{% elif category=='success' %}green{% else %}black{% endif %};">
+          {{ message }}
+        </li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+</section>
+{% endblock %}
