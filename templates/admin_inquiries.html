@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Admin – Inquiries{% endblock %}
+
+{% block content %}
+<section>
+  <header class="major">
+    <h2>Customer Inquiries</h2>
+  </header>
+
+  {% if inquiries %}
+  <table style="width:100%; border-collapse: collapse;">
+    <tr>
+      <th>Date</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Message</th>
+      <th>Actions</th>
+    </tr>
+
+    {% for inquiry in inquiries %}
+    <tr>
+      <td>{{ inquiry.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+      <td>{{ inquiry.name }}</td>
+      <td>{{ inquiry.email }}</td>
+      <td style="max-width:400px;">{{ inquiry.message }}</td>
+      <td>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="danger">Delete</button>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+    <p>No inquiries yet.</p>
+  {% endif %}
+
+  <br>
+  <a href="{{ url_for('logout') }}" class="button">Logout</a>
+</section>
+{% endblock %}
