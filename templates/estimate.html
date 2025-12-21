@@ -63,12 +63,6 @@
 </div>
 
 <!-- Painting Fields -->
-<div id="painting-fields" style="{% if selected_service == 'painting' %}display:block{% else %}display:none{% endif %};">
-  <div class="form-group">
-    <label for="height">Wall Height (ft)</label>
-    <input type="number" name="height" id="height" step="0.1" value="{{ height_value }}">
-  </div>
-
   <div class="form-group">
     <label for="full_repaint">Walls</label>
     <select name="full_repaint" id="full_repaint">
@@ -94,7 +88,7 @@
   </div>
 
   <div class="form-group">
-    <label for="baseboards">Baseboards?</label>
+    <label for="baseboards">Base and Trim Molding?</label>
     <select name="baseboards" id="baseboards">
       <option value="no" {% if baseboards_value == 'no' %}selected{% endif %}>No</option>
       <option value="yes" {% if baseboards_value == 'yes' %}selected{% endif %}>Yes</option>
