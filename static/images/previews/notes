@@ -23,3 +23,28 @@ epoxy_garage.jpg (default)
 
 Don’t need every combination, just the highlights.
 The JS will fall back gracefully.
+
+need a total of 27 images
+- 24 painting
+- 3 epoxy
+
+
+/static/images/previews/interior_full_repaint_baseboards_crown.jpg
+/static/images/previews/interior_full_repaint_ceiling_fresh.jpg
+/static/images/previews/interior_full_repaint_ceiling_fresh_baseboards.jpg
+/static/images/previews/interior_full_repaint_ceiling_fresh_crown.jpg
+/static/images/previews/interior_full_repaint_ceiling_fresh_baseboards_crown.jpg
+/static/images/previews/interior_full_repaint_ceiling_repaint.jpg
+/static/images/previews/interior_refresh.jpg
+/static/images/previews/interior_refresh_baseboards.jpg
+/static/images/previews/interior_refresh_crown.jpg
+/static/images/previews/interior_refresh_baseboards_crown.jpg
+/static/images/previews/interior_refresh_ceiling_fresh.jpg
+/static/images/previews/interior_refresh_ceiling_fresh_baseboards.jpg
+/static/images/previews/interior_refresh_ceiling_fresh_crown.jpg
+/static/images/previews/interior_refresh_ceiling_fresh_baseboards_crown.jpg
+/static/images/previews/interior_refresh_ceiling_repaint.jpg
+/static/images/previews/interior_refresh_ceiling_repaint_baseboards.jpg
+/static/images/previews/interior_refresh_ceiling_repaint_crown.jpg
+/static/images/previews/interior_refresh_ceiling_repaint_baseboards_crown.jpg
+

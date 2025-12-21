@@ -22,6 +22,7 @@
 # - takes stored parameters and gets summation of all parameters if boolean for parameter is true.\
 from unicodedata import category
 
+# Rates edited on 12/21/2025
 
 class PaintEstimator:
     def __init__(self):
@@ -37,23 +38,31 @@ class PaintEstimator:
         self,
         length: float,
         width: float,
-        height: float,
         full_repaint: bool
     ):
         self.square_footage = length * width
         # TODO: change base rates
-        base_rate = 2.50
+        base_rate = 4.50
         coats = 3 if full_repaint else 1
-
+        if coats == 1:
+            base_rate = 2.5
+            """
+        # edit out
         height_adjustment = 0.00
         if height > 10:
+            # 10 per square foot including ceilings walls and trims
             height_adjustment = 0.25 * (height - 10)
         elif height < 8:
             height_adjustment = -0.15 * (8 - height)
-
-        self.wall_cost = (
+        
+                    self.wall_cost = (
             base_rate + height_adjustment
-        ) * self.square_footage * coats
+        ) * self.square_footage
+            
+        """
+        self.wall_cost = (
+            base_rate
+        ) * self.square_footage
 
     # -------------------------
     # Ceiling
@@ -66,9 +75,12 @@ class PaintEstimator:
         if not paint_ceiling:
             return
         #TODO: change rate
-        rate = 1.50
+        rate = 3.50
         coats = 2 if full_repaint else 1
-        self.ceiling_cost = rate * self.square_footage * coats
+        if coats == 1:
+            rate = 2.0
+
+        self.ceiling_cost = rate * self.square_footage
 
     # -------------------------
     # Trim
@@ -78,10 +90,8 @@ class PaintEstimator:
         baseboards: bool,
         crown: bool
     ):
-        # TODO: find rates for crown and base trims
-        crown_trim_rate = 1.50
-        base_trim_rate = 1.50
-        # TODO: should be multiplied by square footage of room
+        crown_trim_rate = 2.00
+        base_trim_rate = 3.50
         if baseboards:
             self.trim_cost += (self.square_footage * base_trim_rate)
         if crown:
@@ -105,13 +115,13 @@ class EpoxyEstimator:
 
     def estimate_floor(self, length: float, width: float, epoxy_type: str):
         self.square_footage = length * width
-        # TODO: need to change rates
-        rates = {"solid": 5.0, "chip": 6.0, "metallic": None}
+        rates = {"solid": 6.0, "chip": 8.0, "metallic": None}
 
         if epoxy_type.lower() == "metallic":
             self.custom_message = (
                 "You selected Metallic epoxy. Pricing is custom and "
-                "will be provided in person."
+                "will be provided in person, but around 12 dollars "
+                "per square foot."
             )
             self.epoxy_cost = 0.0
         else:
