@@ -1,3 +1,8 @@
-flask
-flask_sqlalchemy
-gunicorn
+Flask
+Flask-WTF
+Flask-Limiter
+Flask-SQLAlchemy
+python-dotenv
+waitress
+email-validator
+WTForms
