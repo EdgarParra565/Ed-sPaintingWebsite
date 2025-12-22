@@ -220,13 +220,12 @@ def estimate():
             paint = PaintEstimator()
             length = float(request.form.get("length", 0))
             width = float(request.form.get("width", 0))
-            height = float(request.form.get("height", 0))
             full_repaint = request.form.get("full_repaint") == "yes"
             paint_ceiling = request.form.get("paint_ceiling") == "yes"
             ceiling_repaint = request.form.get("ceiling_repaint") == "yes"
             baseboards = request.form.get("baseboards") == "yes"
             crown = request.form.get("crown") == "yes"
-            paint.estimate_walls(length, width, height, full_repaint)
+            paint.estimate_walls(length, width, full_repaint)
             paint.estimate_ceiling(paint_ceiling, ceiling_repaint)
             paint.estimate_trim(baseboards, crown)
             estimate_result = paint.total()
@@ -260,4 +259,5 @@ def estimate():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run()
+    # No app.run() here — WSGI server (Waitress) will run the app
+

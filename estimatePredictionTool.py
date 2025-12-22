@@ -74,7 +74,6 @@ class PaintEstimator:
     ):
         if not paint_ceiling:
             return
-        #TODO: change rate
         rate = 3.50
         coats = 2 if full_repaint else 1
         if coats == 1:

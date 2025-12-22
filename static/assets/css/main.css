@@ -2314,7 +2314,7 @@ button,
 }
 
 .gallery-img {
-  max-width: 98%;   /* slightly smaller */
+  max-width: 100%;   /* slightly smaller */
   height: auto;
   display: block;
   margin: 0 auto;   /* center it */
