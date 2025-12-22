@@ -124,7 +124,7 @@ Message:
 # -----------------------------
 
 @app.route("/", methods=["GET", "POST"])
-@limiter.limit("5 per minute")
+@limiter.limit("60 per minute")
 def index():
     form = ContactForm()
     if form.validate_on_submit():
@@ -153,7 +153,7 @@ def index():
 
 
 @app.route("/admin/login", methods=["GET", "POST"])
-@limiter.limit("5 per 15 minutes")
+@limiter.limit("10 per 15 minutes")
 def admin_login():
     form = AdminLoginForm()
     if form.validate_on_submit():
