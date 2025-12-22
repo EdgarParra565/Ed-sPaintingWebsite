@@ -6,3 +6,4 @@ python-dotenv
 waitress
 email-validator
 WTForms
+psycopg2-binary
