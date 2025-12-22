@@ -3,27 +3,46 @@
 {% block title %}Admin Login{% endblock %}
 
 {% block content %}
-<section>
-  <h1>Admin Login</h1>
-  <form method="POST">
-    {{ form.hidden_tag() }}
-    <div>
-      {{ form.password.label }}
-      {{ form.password }}
-    </div>
-    <button type="submit">Login</button>
-  </form>
+<section id="admin-login">
+  <header class="major">
+    <h1>Admin Login</h1>
+  </header>
 
+  <!-- Flash messages -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-      <ul>
       {% for category, message in messages %}
-        <li style="color: {% if category=='error' %}red{% elif category=='success' %}green{% else %}black{% endif %};">
-          {{ message }}
-        </li>
+        <div class="box {{ category }}">{{ message }}</div>
       {% endfor %}
-      </ul>
     {% endif %}
   {% endwith %}
+
+  <!-- Form validation errors -->
+  {% if form.errors %}
+    <div class="box error">
+      <ul>
+        {% for field, errors in form.errors.items() %}
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="row gtr-uniform">
+      <div class="col-12">
+        {{ form.password.label }}
+        {{ form.password(class="input") }}
+      </div>
+
+      <div class="col-12">
+        <button type="submit" class="primary">Login</button>
+      </div>
+    </div>
+  </form>
 </section>
 {% endblock %}

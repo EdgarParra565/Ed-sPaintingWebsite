@@ -2295,34 +2295,23 @@ button,
     color: #555;
 }
 
-#banner .image img {
-  width: auto;
-  max-width: none;
-  height: auto;
-}
-
-#banner .image img {
-  max-width: 600px;
+.logo {
   width: 100%;
+  max-width: 600px;
   height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 @media (max-width: 768px) {
-  #banner .image img {
+  .logo {
     max-width: 200px;
   }
 }
 
 .gallery-img {
-  max-width: 100%;   /* slightly smaller */
+  max-width: 100%;
   height: auto;
   display: block;
-  margin: 0 auto;   /* center it */
-}
-
-.logo {
-  max-width: 100%;   /* adjust percentage to control size */
-  height: auto;     /* maintain aspect ratio */
-  display: block;   /* allows margin auto to center */
-  margin: 0 auto;   /* center horizontally */
+  margin: 0 auto;
 }
