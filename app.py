@@ -141,7 +141,10 @@ def index():
         try:
             db.session.add(inquiry)
             db.session.commit()
-            send_email(inquiry)
+            try:
+                send_email(inquiry)
+            except Exception as e:
+                print("Email failed:", e)
             flash("Your message has been sent successfully!", "success")
         except Exception:
             db.session.rollback()
@@ -159,9 +162,12 @@ def admin_login():
     if form.validate_on_submit():
         password = form.password.data
         admin_hash = os.getenv("ADMIN_PASSWORD_HASH")
+        if not admin_hash:
+            flash("Admin login not configured", "danger")
+            return redirect("/admin/login")
+
         if check_password_hash(admin_hash, password):
             session["admin_logged_in"] = True
-            flash("Logged in successfully!", "success")
             return redirect("/admin/inquiries")
         flash("Invalid password", "danger")
         return redirect("/admin/login")
