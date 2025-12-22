@@ -2320,3 +2320,9 @@ button,
   margin: 0 auto;   /* center it */
 }
 
+.logo {
+  max-width: 100%;   /* adjust percentage to control size */
+  height: auto;     /* maintain aspect ratio */
+  display: block;   /* allows margin auto to center */
+  margin: 0 auto;   /* center horizontally */
+}
