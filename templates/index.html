@@ -6,8 +6,7 @@
 <section id="banner">
   <div class="content">
     <header>
-      <h1>Welcome to <br>
-        Ed's Painting LLC</h1>
+      <h1>Welcome to <br>Ed's Painting LLC</h1>
       <p>Professional Interior and Exterior Painting Services</p>
     </header>
     <p>
@@ -15,41 +14,43 @@
       Contact us below or call the provided phone number, and we will get back to you quickly!
     </p>
   </div>
+
   <span class="image object">
-    <img src="{{ url_for('static', filename='images/EDSpaintinglogo1.JPG') }}"
-     alt="EDS Painting Logo"
-     class="logo">
+    <img
+      src="{{ url_for('static', filename='images/EDSpaintinglogo1.JPG') }}"
+      alt="EDS Painting Logo"
+      class="logo"
+    >
   </span>
 </section>
 
-<!-- About Us Section -->
+<!-- About Us -->
 <section id="about-us">
   <header class="major">
     <h2>About Us</h2>
   </header>
   <p>
-    We are a local family owned business in the New Jersey/ New York area, specializing in high-quality, interior
-    and exterior, painting and epoxy flooring services.
-    Our team is dedicated to providing professional and reliable service for both residential and commercial projects.
-    Our jobs range from small touch up jobs to newly developed homes.
+    We are a local family owned business in the New Jersey / New York area, specializing
+    in high-quality interior and exterior painting and epoxy flooring services.
   </p>
   <p>
-    With 20+ years of experience and a commitment to customer satisfaction, we ensure
+    With 20+ years of experience and a commitment to customer satisfaction,
     every project is completed to the highest standards.
   </p>
 </section>
 
-<!-- Services Section -->
+<!-- Services -->
 <section id="services">
   <header class="major">
     <h2>Our Services</h2>
   </header>
+
   <div class="features">
     <article>
       <span class="icon solid fa-paint-roller"></span>
       <div class="content">
         <h3>Painting</h3>
-        <p>Interior and exterior painting services, including walls, ceilings, trims, doors, etc.</p>
+        <p>Interior and exterior painting services including walls, ceilings, trim, and doors.</p>
       </div>
     </article>
 
@@ -57,7 +58,7 @@
       <span class="icon solid fa-warehouse"></span>
       <div class="content">
         <h3>Epoxy Flooring</h3>
-        <p>Garage and commercial epoxy flooring with options for solid, chip, or metallic finishes.</p>
+        <p>Garage and commercial epoxy flooring: solid, chip, and metallic finishes.</p>
       </div>
     </article>
 
@@ -65,27 +66,41 @@
       <span class="icon solid fa-tools"></span>
       <div class="content">
         <h3>Additional Services</h3>
-        <p>Including but not limited to trim work, cabinet work, wood staining, and exterior cleaning.
-        For custom requests reach out or fill out the contact form!</p>
+        <p>Trim work, cabinet work, staining, exterior cleaning, and more.</p>
       </div>
     </article>
   </div>
 </section>
 
-
-<!-- Contact Section -->
+<!-- Contact -->
 <section id="contact">
   <header class="major">
     <h2>Contact Us</h2>
   </header>
 
+  <!-- Flash messages -->
   {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-      <div class="box {{ category }}">{{ message }}</div>
-    {% endfor %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="box {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
   {% endwith %}
 
-  <form method="POST">
+  <!-- Form validation errors -->
+  {% if form.errors %}
+    <div class="box error">
+      <ul>
+        {% for field, errors in form.errors.items() %}
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <form method="POST" novalidate>
     {{ form.hidden_tag() }}
 
     <div class="row gtr-uniform">
@@ -101,10 +116,11 @@
         {{ form.message(rows="6", placeholder="Message") }}
       </div>
 
-      <input type="text" name="company" style="display:none">
+      <!-- Honeypot -->
+      <input type="text" name="company" tabindex="-1" autocomplete="off" style="display:none">
 
       <div class="col-12">
-        <button class="primary">Send Message</button>
+        <button type="submit" class="primary">Send Message</button>
       </div>
     </div>
   </form>

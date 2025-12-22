@@ -129,7 +129,7 @@ def index():
     form = ContactForm()
     if form.validate_on_submit():
         # Honeypot
-        if request.form.get("company"):
+        if request.form.get("company", "").strip():
             return redirect("/")
 
         inquiry = Inquiry(
