@@ -42,6 +42,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Database
 # -----------------------------
 db = SQLAlchemy(app)
+with app.app_context():
+    db.create_all()
 
 class Inquiry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -102,31 +104,34 @@ def admin_inquiries():
 
 
 def send_email(inquiry):
-    msg = EmailMessage()
-    msg["Subject"] = "New Website Contact Inquiry"
-    msg["From"] = os.getenv("MAIL_USERNAME")
-    msg["To"] = os.getenv("MAIL_TO")
-    msg["Reply-To"] = inquiry.email
-    msg.set_content(f"""
-New inquiry received:
-
-Name: {inquiry.name}
-Email: {inquiry.email}
-
-Message:
-{inquiry.message}
-""")
     try:
         server = os.getenv("MAIL_SERVER")
-        port = int(os.getenv("MAIL_PORT"))
+        port = int(os.getenv("MAIL_PORT", "0"))
         username = os.getenv("MAIL_USERNAME")
         password = os.getenv("MAIL_PASSWORD")
-        with smtplib.SMTP(server, port) as smtp:
+        to_email = os.getenv("MAIL_TO")
+
+        if not all([server, port, username, password, to_email]):
+            return  # silently skip in prod
+
+        msg = EmailMessage()
+        msg["Subject"] = "New Website Contact Inquiry"
+        msg["From"] = username
+        msg["To"] = to_email
+        msg["Reply-To"] = inquiry.email
+        msg.set_content(
+            f"Name: {inquiry.name}\n"
+            f"Email: {inquiry.email}\n\n"
+            f"{inquiry.message}"
+        )
+
+        with smtplib.SMTP(server, port, timeout=5) as smtp:
             smtp.starttls()
             smtp.login(username, password)
             smtp.send_message(msg)
+
     except Exception as e:
-        print("Failed to send email:", e)
+        app.logger.error(f"Email error: {e}")
 
 # -----------------------------
 # Routes
@@ -271,8 +276,11 @@ def estimate():
 # -----------------------------
 # Main
 # -----------------------------
+# Put at creation of db now
+"""
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+    """
     # No app.run() here — WSGI server (Waitress) will run the app
 
