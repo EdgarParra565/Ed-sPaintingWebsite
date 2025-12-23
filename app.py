@@ -1,4 +1,6 @@
 from functools import wraps
+from threading import Thread
+
 from flask import Flask, session, flash, redirect, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm, CSRFProtect
@@ -96,12 +98,15 @@ def admin_required(f):
 @admin_required
 def admin_inquiries():
     try:
-        inquiries = Inquiry.query.order_by(Inquiry.created_at.desc()).all()
+        inquiries = Inquiry.query.order_by(Inquiry.created_at.desc()).limit(100).all()
         return render_template("admin_inquiries.html", inquiries=inquiries)
     except Exception as e:
         print("Error fetching inquiries:", e)
         return "Internal Server Error", 500
 
+# Changed to this email now
+def send_email_async(inquiry):
+    Thread(target=send_email, args=(inquiry,)).start()
 
 def send_email(inquiry):
     try:
@@ -156,7 +161,7 @@ def index():
             db.session.add(inquiry)
             db.session.commit()
             try:
-                send_email(inquiry)
+                send_email_async(inquiry)
             except Exception as e:
                 print("Email failed:", e)
             flash("Your message has been sent successfully!", "success")
