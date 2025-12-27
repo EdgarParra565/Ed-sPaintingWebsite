@@ -1,8 +1,13 @@
-from app import app
 from waitress import serve
-import os
+from app import app
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    print(f"Starting server on port {port}")
-    serve(app, host="0.0.0.0", port=port, threads=4)
+if __name__ == '__main__':
+    serve(
+        app,
+        host='0.0.0.0',
+        port=10000,
+        threads=8,
+        channel_timeout=60,
+        cleanup_interval=10,
+        asyncore_use_poll=True
+    )
