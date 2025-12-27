@@ -44,8 +44,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Database
 # -----------------------------
 db = SQLAlchemy(app)
-with app.app_context():
-    db.create_all()
 
 class Inquiry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,6 +52,12 @@ class Inquiry(db.Model):
     message = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
 
+# Initialize database tables
+def init_db():
+    with app.app_context():
+        db.create_all()
+
+init_db()
 # -----------------------------
 # Contact Form
 # -----------------------------
@@ -101,8 +105,11 @@ def admin_inquiries():
         inquiries = Inquiry.query.order_by(Inquiry.created_at.desc()).limit(100).all()
         return render_template("admin_inquiries.html", inquiries=inquiries)
     except Exception as e:
-        print("Error fetching inquiries:", e)
-        return "Internal Server Error", 500
+        app.logger.error(f"Error fetching inquiries: {str(e)}")
+        import traceback
+        app.logger.error(traceback.format_exc())
+        flash("Error loading inquiries. Please check the logs.", "error")
+        return render_template("admin_inquiries.html", inquiries=[])
 
 # Changed to this email now
 def send_email_async(inquiry):
