@@ -43,19 +43,34 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # -----------------------------
 # Database
 # -----------------------------
-db = SQLAlchemy(app)
+# Replace your database initialization section with this:
+try:
+    db = SQLAlchemy(app)
 
-class Inquiry(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(120), nullable=False)
-    message = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now)
 
-# Initialize database tables
-def init_db():
-    with app.app_context():
-        db.create_all()
+    class Inquiry(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        name = db.Column(db.String(100), nullable=False)
+        email = db.Column(db.String(120), nullable=False)
+        message = db.Column(db.Text, nullable=False)
+        created_at = db.Column(db.DateTime, default=datetime.now)
+
+
+    # Initialize database tables
+    def init_db():
+        try:
+            with app.app_context():
+                db.create_all()
+                print("Database tables created successfully")
+        except Exception as e:
+            print(f"Database initialization error: {e}")
+
+
+    init_db()
+
+except Exception as e:
+    print(f"Database setup error: {e}")
+    raise
 
 init_db()
 # -----------------------------
@@ -284,6 +299,10 @@ def estimate():
         baseboards_value=request.form.get("baseboards", "no"),
         crown_value=request.form.get("crown", "no"),
     )
+
+@app.route("/health")
+def health_check():
+    return {"status": "healthy"}, 200
 
 # -----------------------------
 # Main

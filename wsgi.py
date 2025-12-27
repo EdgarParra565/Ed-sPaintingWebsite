@@ -4,4 +4,5 @@ import os
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-    serve(app, host="0.0.0.0", port=port)
+    print(f"Starting server on port {port}")
+    serve(app, host="0.0.0.0", port=port, threads=4)
