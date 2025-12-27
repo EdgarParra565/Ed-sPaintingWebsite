@@ -127,10 +127,13 @@ def admin_inquiries():
         return render_template("admin_inquiries.html", inquiries=[])
 
 # Changed to this email now
-def send_email_async(inquiry):
-    Thread(target=send_email, args=(inquiry,)).start()
+def send_email_async(inquiry_data):
+    """Pass inquiry data as dict instead of SQLAlchemy object"""
+    Thread(target=send_email, args=(inquiry_data,)).start()
 
-def send_email(inquiry):
+
+def send_email(inquiry_data):
+    """inquiry_data is a dict with name, email, message"""
     try:
         server = os.getenv("MAIL_SERVER")
         port = int(os.getenv("MAIL_PORT", "0"))
@@ -139,23 +142,26 @@ def send_email(inquiry):
         to_email = os.getenv("MAIL_TO")
 
         if not all([server, port, username, password, to_email]):
-            return  # silently skip in prod
+            app.logger.warning("Email not configured - skipping send")
+            return
 
         msg = EmailMessage()
         msg["Subject"] = "New Website Contact Inquiry"
         msg["From"] = username
         msg["To"] = to_email
-        msg["Reply-To"] = inquiry.email
+        msg["Reply-To"] = inquiry_data['email']
         msg.set_content(
-            f"Name: {inquiry.name}\n"
-            f"Email: {inquiry.email}\n\n"
-            f"{inquiry.message}"
+            f"Name: {inquiry_data['name']}\n"
+            f"Email: {inquiry_data['email']}\n\n"
+            f"{inquiry_data['message']}"
         )
 
-        with smtplib.SMTP(server, port, timeout=5) as smtp:
+        with smtplib.SMTP(server, port, timeout=10) as smtp:
             smtp.starttls()
             smtp.login(username, password)
             smtp.send_message(msg)
+
+        app.logger.info(f"Email sent successfully to {to_email}")
 
     except Exception as e:
         app.logger.error(f"Email error: {e}")
@@ -182,19 +188,28 @@ def index():
         try:
             db.session.add(inquiry)
             db.session.commit()
+
+            # Pass data as dict instead of SQLAlchemy object
+            inquiry_data = {
+                'name': inquiry.name,
+                'email': inquiry.email,
+                'message': inquiry.message
+            }
+
             try:
-                send_email_async(inquiry)
+                send_email_async(inquiry_data)
             except Exception as e:
-                print("Email failed:", e)
+                app.logger.error(f"Email failed: {e}")
+
             flash("Your message has been sent successfully!", "success")
-        except Exception:
+        except Exception as e:
             db.session.rollback()
+            app.logger.error(f"Database error: {e}")
             flash("Something went wrong. Please try again.", "error")
 
         return redirect("/")
 
     return render_template("index.html", form=form)
-
 
 @app.route("/admin/login", methods=["GET", "POST"])
 @limiter.limit("10 per 15 minutes")
@@ -300,6 +315,10 @@ def estimate():
         crown_value=request.form.get("crown", "no"),
     )
 
+
+# -----------------------------
+# Health
+# -----------------------------
 @app.route("/health")
 def health_check():
     return {"status": "healthy"}, 200
