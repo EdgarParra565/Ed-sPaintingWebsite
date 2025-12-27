@@ -272,10 +272,12 @@ def page_not_found(e):
 # Gallery & Estimate Routes
 # -----------------------------
 @app.route("/gallery/painting")
+@limiter.exempt
 def painting_gallery():
     return render_template("painting_gallery.html")
 
 @app.route("/gallery/epoxy")
+@limiter.exempt
 def epoxy_gallery():
     return render_template("epoxy_gallery.html")
 
@@ -334,15 +336,6 @@ def estimate():
 def health_check():
     return {"status": "healthy"}, 200
 
-@app.route("/gallery/painting")
-@limiter.exempt
-def painting_gallery():
-    return render_template("painting_gallery.html")
-
-@app.route("/gallery/epoxy")
-@limiter.exempt
-def epoxy_gallery():
-    return render_template("epoxy_gallery.html")
 
 # -----------------------------
 # Main
