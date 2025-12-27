@@ -141,8 +141,12 @@ def send_email(inquiry_data):
         password = os.getenv("MAIL_PASSWORD")
         to_email = os.getenv("MAIL_TO")
 
+        # Log configuration (without password)
+        app.logger.info(f"Email config - Server: {server}, Port: {port}, Username: {username}, To: {to_email}")
+
         if not all([server, port, username, password, to_email]):
-            app.logger.warning("Email not configured - skipping send")
+            app.logger.warning(
+                f"Email not configured - Missing: server={bool(server)}, port={bool(port)}, username={bool(username)}, password={bool(password)}, to_email={bool(to_email)}")
             return
 
         msg = EmailMessage()
@@ -156,15 +160,20 @@ def send_email(inquiry_data):
             f"{inquiry_data['message']}"
         )
 
+        app.logger.info(f"Attempting to send email to {to_email}...")
+
         with smtplib.SMTP(server, port, timeout=10) as smtp:
             smtp.starttls()
+            app.logger.info("TLS started")
             smtp.login(username, password)
+            app.logger.info("Login successful")
             smtp.send_message(msg)
-
-        app.logger.info(f"Email sent successfully to {to_email}")
+            app.logger.info(f"Email sent successfully to {to_email}")
 
     except Exception as e:
         app.logger.error(f"Email error: {e}")
+        import traceback
+        app.logger.error(traceback.format_exc())
 
 # -----------------------------
 # Routes
