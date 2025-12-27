@@ -197,7 +197,7 @@ def index():
             }
 
             try:
-                send_email_async(inquiry_data)
+                send_email_async(inquiry_data)  # ← NOW PASSING DICT
             except Exception as e:
                 app.logger.error(f"Email failed: {e}")
 
