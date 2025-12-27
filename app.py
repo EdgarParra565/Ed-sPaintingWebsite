@@ -93,7 +93,7 @@ class AdminLoginForm(FlaskForm):
 limiter = Limiter(
     key_func=get_remote_address,
     app=app,
-    default_limits=["200 per day", "50 per hour"],
+    default_limits=["500 per day", "100 per hour"],  # Slightly more generous
     storage_uri="memory://"
 )
 
@@ -261,6 +261,7 @@ def logout():
 # -----------------------------
 @app.errorhandler(429)
 def ratelimit_handler(e):
+    app.logger.warning(f"Rate limit hit from {get_remote_address()}: {e}")
     return render_template("rate_limit.html"), 429
 
 @app.errorhandler(404)
@@ -329,8 +330,19 @@ def estimate():
 # Health
 # -----------------------------
 @app.route("/health")
+@limiter.exempt
 def health_check():
     return {"status": "healthy"}, 200
+
+@app.route("/gallery/painting")
+@limiter.exempt
+def painting_gallery():
+    return render_template("painting_gallery.html")
+
+@app.route("/gallery/epoxy")
+@limiter.exempt
+def epoxy_gallery():
+    return render_template("epoxy_gallery.html")
 
 # -----------------------------
 # Main
