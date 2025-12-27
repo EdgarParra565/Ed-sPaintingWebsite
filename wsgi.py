@@ -1,6 +1,7 @@
 from app import app
 from waitress import serve
+import os
 
 if __name__ == "__main__":
-    # Waitress will serve your app on port 5000 (or any port you prefer)
-    serve(app, host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 10000))
+    serve(app, host="0.0.0.0", port=port)
